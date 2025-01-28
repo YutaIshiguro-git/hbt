@@ -141,6 +141,21 @@ button {
     cursor: pointer;
 }
 
+button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
 button:hover {
     background-color: #c76d38;
+}
+
+button:hover:enabled {
+    background-color: #0056b3;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+    display: none;
 }
