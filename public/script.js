@@ -1,3 +1,5 @@
+let isExistingRecord = false; // グローバル変数として定義
+
 document.getElementById('adminForm').addEventListener('input', validateForm);
 
 function validateForm() {
@@ -34,7 +36,7 @@ function validateForm() {
     }
 
     // Validate ADC_CHANNEL
-    const adcChannel = document.getElementById('adcChannel').value; // adcChannelを宣言
+    const adcChannel = document.getElementById('adcChannel').value;
     const adcChannelError = document.getElementById('adcChannelError');
     if (!adcChannel || adcChannel < 0) {
         adcChannelError.style.display = 'block';
@@ -43,7 +45,7 @@ function validateForm() {
         adcChannelError.style.display = 'none';
     }
 
-    // Enable or disable the save button
+    console.log('Form validation status:', isValid); // Debugging log
     document.getElementById('saveButton').disabled = !isValid;
 }
 
@@ -67,10 +69,10 @@ async function populateData() {
         if (matchingData) {
             updateFormFields(matchingData);
             console.log('Loaded Data:', matchingData);
-            isExistingRecord = true;
+            isExistingRecord = true; // 記録が存在する場合は true
         } else {
             clearForm();
-            isExistingRecord = false;
+            isExistingRecord = false; // 記録が存在しない場合は false
         }
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -111,9 +113,9 @@ function saveData() {
         return;
     }
 
-    console.log('Saved Data:', data);
+    console.log('Saving data:', data);
 
-    const method = isExistingRecord ? 'PUT' : 'POST';
+    const method = isExistingRecord ? 'PUT' : 'POST'; // isExistingRecordを利用
     const url = isExistingRecord ? `http://localhost:3000/api/plants/${data.UNIT_NAME}` : 'http://localhost:3000/api/plants';
 
     fetch(url, {
@@ -132,7 +134,7 @@ function saveData() {
         .then(result => {
             alert('入力が完了しました');
             document.getElementById('adminForm').reset();
-            isExistingRecord = false;
+            isExistingRecord = false; // フォーム送信後にリセット
         })
         .catch(error => {
             console.error('Error:', error);
