@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watering Log Charts</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #e3e3e3;
+            color: #444444;
+        }
+
+        a:link {
+            color: #444444;
+        }
+
+        a:visited {
+            color: #444444;
+        }
+
+        a:hover {
+            color: #e3e3e3;
+        }
+
+        a:active {
+            color: #e3e3e3;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .container-top {
+            display: flex;
+            align-items: center;
+            /* 縦方向の位置を揃える */
+            justify-content: space-between;
+            /* 横方向のスペースを均等に配置 */
+            flex-wrap: wrap;
+            /* 必要に応じて折り返し */
+        }
+
+        h1 {
+            text-align: left;
+            color: #444444;
+        }
+
+        .charts {
+            display: flex;
+            flex-direction: column;
+            /* グループを縦に並べる */
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .chart-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .chart-group-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: flex-start;
+        }
+
+        .chart-group-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ffffff;
+            background-color: #444444;
+            text-align: left;
+            padding-left: 5px;
+            padding-top: 5px;
+            padding-bottom: 5px;
+        }
+
+        .chart-container {
+            flex: 1 1 calc(33.33% - 20px);
+            min-width: 300px;
+            max-width: 400px;
+            height: 400px;
+            /* 高さを指定 */
+            box-sizing: border-box;
+            text-align: center;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="container-top">
+            <h1>HBT Watering Log Charts</h1>
+
+            <!-- メニューリンクを追加 -->
+            <nav class="menu">
+                <a href="index.html">Top</a> |
+                <a href="input.html">Unit Registration</a> |
+                <a href="list.html">Unit List</a>
+            </nav>
+        </div>
+        <div id="chartsContainer" class="charts"></div>
+    </div>
+
+    <script>
+        async function fetchData() {
+            try {
+                const response = await fetch('http://localhost:3000/api/watering-logs');
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch data: ${response.status}`);
+                }
+                const logs = await response.json();
+
+                // 現在の日時
+                const now = new Date();
+                // 7日前の日時
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(now.getDate() - 7);
+
+                // 直近7日間のデータをフィルタリング
+                const filteredLogs = logs.filter(log => {
+                    const logDate = new Date(log.TIME_STAMP);
+                    return logDate >= sevenDaysAgo && logDate <= now;
+                });
+
+                // Group data by UNIT_NAME and sort by UNIT_NAME
+                const groupedData = Object.entries(
+                    filteredLogs.reduce((acc, log) => {
+                        acc[log.UNIT_NAME] = acc[log.UNIT_NAME] || [];
+                        acc[log.UNIT_NAME].push(log);
+                        return acc;
+                    }, {})
+                ).sort(([a], [b]) => a.localeCompare(b));
+
+                return groupedData;
+            } catch (error) {
+                console.error('Error fetching data:', error);
+                alert('Failed to fetch watering log data. Please check the server.');
+            }
+        }
+
+        function createChart(unitName, data, type) {
+            const container = document.createElement("div");
+            container.className = "chart-container";
+            container.setAttribute("data-unit", unitName); // ユニット名をデータ属性として保持
+
+            const canvas = document.createElement("canvas");
+            container.appendChild(canvas);
+
+            const ctx = canvas.getContext("2d");
+
+            let dataset;
+            let title;
+
+            if (type === "moisture") {
+                dataset = [
+                    {
+                        label: "MOISTURE_LEVEL",
+                        data: data.map(log => log.MOISTURE_LEVEL),
+                        borderColor: "#870B3E",
+                        fill: false
+                    },
+                    {
+                        label: "EXPECTED_MOISTURE_LEVEL",
+                        data: data.map(log => log.EXPECTED_MOISTURE_LEVEL),
+                        borderColor: "red",
+                        fill: false
+                    }
+                ];
+                title = `Moisture Levels`;
+            } else if (type === "temperature") {
+                dataset = [
+                    {
+                        label: "TEMPERATURE",
+                        data: data.map(log => log.TEMPERATURE),
+                        borderColor: "#c76d38",
+                        fill: false
+                    }
+                ];
+                title = `Temperature`;
+            } else if (type === "humidity") {
+                dataset = [
+                    {
+                        label: "HUMIDITY",
+                        data: data.map(log => log.HUMIDITY),
+                        borderColor: "#BCC2BB",
+                        fill: false
+                    }
+                ];
+                title = `Humidity`;
+            }
+
+            new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: data.map(log => new Date(log.TIME_STAMP).toLocaleString()),
+                    datasets: dataset
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: false },//グラフの判例の表示または非表示。表示の際のパラメーターは"Top"
+                        title: { display: true, text: title }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: "Time" } },
+                        y: { title: { display: true, text: "Values" } }
+                    }
+                }
+            });
+
+            // チャートクリック時に正しいユニット名で遷移
+            container.addEventListener("click", () => {
+                // 遷移前にユニット名とデータをsessionStorageに保存
+                sessionStorage.setItem("unitName", unitName);
+                sessionStorage.setItem("chartData", JSON.stringify(data));
+
+                // detail.htmlに遷移
+                window.location.href = `details.html?unit=${encodeURIComponent(unitName)}&type=${type}`;
+            });
+
+
+            return container;
+        }
+
+
+        async function loadCharts() {
+            const groupedData = await fetchData();
+            if (!groupedData) return;
+
+            const chartsContainer = document.getElementById("chartsContainer");
+
+            groupedData.forEach(([unitName, data]) => {
+                const chartGroup = document.createElement("div");
+                chartGroup.className = "chart-group";
+
+                const chartTitle = document.createElement("div");
+                chartTitle.className = "chart-group-title";
+                chartTitle.textContent = unitName;
+
+                const chartGroupContent = document.createElement("div");
+                chartGroupContent.className = "chart-group-content";
+
+                const moistureChart = createChart(unitName, data, "moisture");
+                const temperatureChart = createChart(unitName, data, "temperature");
+                const humidityChart = createChart(unitName, data, "humidity");
+
+                chartGroupContent.appendChild(moistureChart);
+                chartGroupContent.appendChild(temperatureChart);
+                chartGroupContent.appendChild(humidityChart);
+
+                chartGroup.appendChild(chartTitle);
+                chartGroup.appendChild(chartGroupContent);
+
+                chartsContainer.appendChild(chartGroup);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", loadCharts);
+    </script>
+</body>
+
+</html>

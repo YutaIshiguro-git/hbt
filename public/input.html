@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IOT Device Admin Panel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container-input">
+        <div class="container-top">
+            <h1>IOT Device Registration Panel</h1>
+
+            <!-- メニューリンクを追加 -->
+            <nav class="menu">
+                <a href="index.html">Top</a> |
+                <a href="input.html">Unit Registration</a> |
+                <a href="list.html">Unit List</a>
+            </nav>
+        </div>
+        <form id="adminForm">
+            <div class="form-group">
+                <label for="unitName">UNIT_NAME</label>
+                <select id="unitName" name="unitName" required onchange="populateData()">
+                    <option value="">Select UNIT_NAME</option>
+                    <!-- Populate options dynamically -->
+                    <script>
+                        for (let i = 1; i <= 16; i++) {
+                            const unit = i.toString().padStart(2, '0');
+                            document.write(`<option value="UNIT${unit}">UNIT${unit}</option>`);
+                        }
+                    </script>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="moistureLevel">MOISTURE_LEVEL</label>
+                <input type="number" id="moistureLevel" name="moistureLevel" required />
+            </div>
+            <div class="form-group">
+                <label for="pinNumber">PIN_NUMBER</label>
+                <input type="number" id="pinNumber" name="pinNumber" required />
+            </div>
+            <div class="form-group">
+                <label for="adcChannel">ADC_CHANNEL</label>
+                <input type="number" id="adcChannel" name="adcChannel" required />
+            </div>
+            <div class="form-group">
+                <label for="plantName">PLANT_NAME</label>
+                <input type="text" id="plantName" name="plantName" />
+            </div>
+            <div class="form-group">
+                <label for="plantDescription">PLANT_DESCRIPTION</label>
+                <textarea id="plantDescription" name="plantDescription"></textarea>
+            </div>
+            <button type="button" onclick="saveData()">Save</button>
+        </form>
+    </div>
+
+    <!-- JavaScriptの挿入 -->
+    <script>
+        function navigateToListPage() {
+            window.location.href = 'list.html'; // Adjust the file name if needed
+        }
+    </script>
+    <script src="script.js"></script>
+</body>
+
+</html>

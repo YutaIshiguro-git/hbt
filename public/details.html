@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart Details</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="container-top">
+            <h1 id="unitNameHeader"></h1>
+
+            <!-- メニューリンクを追加 -->
+            <nav class="menu">
+                <a href="index.html">Top</a> |
+                <a href="input.html">Unit Registration</a> |
+                <a href="list.html">Unit List</a>
+            </nav>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>TIME_STAMP</th>
+                    <th>MOISTURE_LEVEL</th>
+                    <th>EXPECTED_MOISTURE_LEVEL</th>
+                    <th>TEMPERATURE</th>
+                    <th>HUMIDITY</th>
+                </tr>
+            </thead>
+            <tbody id="detailsTableBody"></tbody>
+        </table>
+        <button onclick="goBack()">Back to Charts</button>
+    </div>
+
+    <script>
+        function loadDetails() {
+            const unitName = sessionStorage.getItem("unitName");
+            const data = JSON.parse(sessionStorage.getItem("chartData"));
+
+            // 現在の日時と7日前の日時を取得
+            const now = new Date();
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(now.getDate() - 7);
+
+            // 直近7日間のデータをフィルタリング
+            const filteredData = data.filter(log => {
+                const logDate = new Date(log.TIME_STAMP);
+                return logDate >= sevenDaysAgo && logDate <= now;
+            });
+
+            // ユニット名をヘッダーに表示
+            document.getElementById("unitNameHeader").textContent = `Details for ${unitName}`;
+
+            // テーブルにデータを表示
+            const tableBody = document.getElementById("detailsTableBody");
+            tableBody.innerHTML = ""; // 既存の内容をクリア
+
+            filteredData.forEach(log => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+            <td>${log.TIME_STAMP}</td>
+            <td>${log.MOISTURE_LEVEL}</td>
+            <td>${log.EXPECTED_MOISTURE_LEVEL}</td>
+            <td>${log.TEMPERATURE}</td>
+            <td>${log.HUMIDITY}</td>
+        `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function goBack() {
+            window.location.href = "index.html";
+        }
+
+        document.addEventListener("DOMContentLoaded", loadDetails);
+
+    </script>
+</body>
+
+</html>

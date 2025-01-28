@@ -1,0 +1,146 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #e3e3e3;
+    color: #444444;
+}
+
+a:link {
+    color: #444444;
+}
+
+a:visited {
+    color: #444444;
+}
+
+a:hover {
+    color: #e3e3e3;
+}
+
+a:active {
+    color: #e3e3e3;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #FFFFFF;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.container-top {
+    display: flex;
+    align-items: center;
+    /* 縦方向の位置を揃える */
+    justify-content: space-between;
+    /* 横方向のスペースを均等に配置 */
+    flex-wrap: wrap;
+    /* 必要に応じて折り返し */
+}
+
+.container-input {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input,
+select,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box; /* これを追加 */
+    margin: 0; /* デフォルトの余白をリセット */
+}
+
+textarea {
+    resize: vertical;
+    height: 80px;
+}
+
+h1 {
+    text-align: left;
+    color: #444444;
+}
+
+h2 {
+    margin-top: 40px;
+    color: #870B3E;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #444444; /* ヘッダー行の背景色を#444444に設定 */
+    color: #FFFFFF; /* ヘッダー行の文字色を白に設定 */
+}
+
+thead tr {
+    background-color: #444444; /* <tr>の背景色を#444444に設定 */
+}
+
+.charts {
+    display: flex;
+    flex-wrap: wrap; /* 横並びで収まらない場合折り返し */
+    gap: 20px; /* 子要素間の余白 */
+    justify-content: flex-start; /* 左寄せ配置 */
+    max-width: 1200px; /* 必要に応じて制限 */
+    margin: 0 auto;
+}
+
+.chart-container {
+    flex: 1 1 calc(33.33% - 20px); /* 3列表示を目指す */
+    min-width: 300px;
+    max-width: 400px;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.chart-container canvas {
+    height: 500px; /* 高さを指定 */
+}
+
+button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #870B3E;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #c76d38;
+}
