@@ -8,13 +8,17 @@ const app = express();
 const PORT = 3000;
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+    origin: 'http://160.16.150.46', // 許可するオリジン
+    methods: ['GET', 'POST', 'PUT', 'DELETE'], // 許可するHTTPメソッド
+    allowedHeaders: ['Content-Type', 'Authorization'] // 許可するヘッダー
+};
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 
 // MongoDB connection
 mongoose.connect('mongodb://localhost:27017/iotAdmin', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
 })
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('MongoDB connection error:', err));
