@@ -5,21 +5,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IOT Device Admin Panel</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f9;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        textarea {
+            resize: vertical;
+            height: 80px;
+        }
+
+        button {
+            display: block;
+            margin: 10px auto;
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="container-input">
-        <div class="container-top">
-            <h1>IOT Device Registration Panel</h1>
-
-            <!-- メニューリンクを追加 -->
-            <nav class="menu">
-                <a href="index.html">Top</a> |
-                <a href="input.html">Unit Registration</a> |
-                <a href="list.html">Unit List</a>
-            </nav>
-        </div>
+    <div class="container">
+        <h1>IOT Device Admin Panel</h1>
         <form id="adminForm">
             <div class="form-group">
                 <label for="unitName">UNIT_NAME</label>
@@ -29,7 +81,7 @@
                     <script>
                         for (let i = 1; i <= 16; i++) {
                             const unit = i.toString().padStart(2, '0');
-                            document.write(`<option value="UNIT${unit}">UNIT${unit}</option>`);
+                            document.write(<option value="UNIT${unit}">UNIT${unit}</option>);
                         }
                     </script>
                 </select>
@@ -55,10 +107,10 @@
                 <textarea id="plantDescription" name="plantDescription"></textarea>
             </div>
             <button type="button" onclick="saveData()">Save</button>
+            <button type="button" onclick="navigateToListPage()">Go to List Page</button>
         </form>
     </div>
 
-    <!-- JavaScriptの挿入 -->
     <script>
         let isExistingRecord = false; // Flag to track if UNIT_NAME already exists
 
@@ -159,9 +211,6 @@
                     });
         }
 
-        function navigateToListPage() {
-            window.location.href = 'list.html'; // Adjust the file name if needed
-        }
         function navigateToListPage() {
             window.location.href = 'list.html'; // Adjust the file name if needed
         }
