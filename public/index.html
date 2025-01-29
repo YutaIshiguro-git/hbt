@@ -120,7 +120,7 @@
     <script>
         async function fetchData() {
             try {
-                const response = await fetch('http://localhost:3000/api/watering-logs');
+                const response = await fetch('http://160.16.150.46:3000/api/watering-logs');
                 if (!response.ok) {
                     throw new Error(`Failed to fetch data: ${response.status}`);
                 }

@@ -58,7 +58,7 @@ async function populateData() {
     }
 
     try {
-        const response = await fetch('http://localhost:3000/api/plants');
+        const response = await fetch('http://160.16.150.46:3000/api/plants');
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -116,7 +116,7 @@ function saveData() {
     console.log('Saving data:', data);
 
     const method = isExistingRecord ? 'PUT' : 'POST'; // isExistingRecordを利用
-    const url = isExistingRecord ? `http://localhost:3000/api/plants/${data.UNIT_NAME}` : 'http://localhost:3000/api/plants';
+    const url = isExistingRecord ? `http://160.16.150.46:3000/api/plants/${data.UNIT_NAME}` : 'http://localhost:3000/api/plants';
 
     fetch(url, {
         method: method,
