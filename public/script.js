@@ -116,7 +116,7 @@ function saveData() {
     console.log('Saving data:', data);
 
     const method = isExistingRecord ? 'PUT' : 'POST'; // isExistingRecordを利用
-    const url = isExistingRecord ? `http://160.16.150.46:3000/api/plants/${data.UNIT_NAME}` : 'http://localhost:3000/api/plants';
+    const url = isExistingRecord ? `http://160.16.150.46:3000/api/plants/${data.UNIT_NAME}` : 'http://160.16.150.46:3000/api/plants';
 
     fetch(url, {
         method: method,
