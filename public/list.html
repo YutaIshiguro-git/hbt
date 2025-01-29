@@ -42,7 +42,7 @@
         // Function to fetch data from the server and populate the table
         async function fetchData() {
             try {
-                const response = await fetch('http://localhost:3000/api/plants');
+                const response = await fetch('http://160.16.150.46:3000/api/plants');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
