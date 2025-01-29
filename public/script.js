@@ -18,7 +18,7 @@ function validateForm() {
     // Validate MOISTURE_LEVEL
     const moistureLevel = document.getElementById('moistureLevel').value;
     const moistureLevelError = document.getElementById('moistureLevelError');
-    if (!moistureLevel || moistureLevel <= 0) {
+    if (moistureLevel === "" || moistureLevel <= 0) {
         moistureLevelError.style.display = 'block';
         isValid = false;
     } else {
@@ -28,24 +28,24 @@ function validateForm() {
     // Validate PIN_NUMBER
     const pinNumber = document.getElementById('pinNumber').value;
     const pinNumberError = document.getElementById('pinNumberError');
-    if (!pinNumber || pinNumber <= 0) {
+    if (pinNumber === "" || pinNumber <= 0) {
         pinNumberError.style.display = 'block';
         isValid = false;
     } else {
         pinNumberError.style.display = 'none';
     }
 
-    // Validate ADC_CHANNEL
+    // Validate ADC_CHANNEL (0は許可, 空欄や負の値はエラー)
     const adcChannel = document.getElementById('adcChannel').value;
     const adcChannelError = document.getElementById('adcChannelError');
-    if (!adcChannel || adcChannel < 0) {
+    if (adcChannel === "" || adcChannel < 0) {  // 空欄または負の値をエラー
         adcChannelError.style.display = 'block';
         isValid = false;
     } else {
         adcChannelError.style.display = 'none';
     }
 
-    console.log('Form validation status:', isValid); // Debugging log
+    console.log('Form validation status:', isValid);
     document.getElementById('saveButton').disabled = !isValid;
 }
 
